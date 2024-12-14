@@ -1,5 +1,7 @@
 import pygame
 import random
+import Obstacles
+
 
 class Terrain:
     def __init__(self, width=800, height=600):
@@ -88,6 +90,14 @@ class Terrain:
         
     def get_colors(self):
         return self.fire_colors if self.mode == "fire" else self.ice_colors
+    
+    def spawn_obstacle(self):
+        new_obstacle = Obstacles.Obstacle(
+            x=self.width + 50,
+            y=self.height - self.ground_height - 50,
+            mode=self.mode
+        )
+        self.obstacles.append(new_obstacle)
         
     def update(self, dt):
         # Update segment positions
@@ -117,25 +127,17 @@ class Terrain:
         if len(self.clouds) < 5:  # Maintain minimum number of clouds
             self.add_new_cloud()
             
-        # Update obstacles
+        # Update and filter obstacles
         for obstacle in self.obstacles:
-            obstacle['x'] -= scroll_amount
-            
-        # Remove off-screen obstacles
-        self.obstacles = [obs for obs in self.obstacles if obs['x'] > -50]
+            obstacle.update(scroll_amount)
+        self.obstacles = [obs for obs in self.obstacles if obs.is_visible()]
         
         # Spawn new obstacles
         self.obstacle_spawn_timer += dt
         if self.obstacle_spawn_timer >= self.obstacle_spawn_delay:
             self.obstacle_spawn_timer = 0
             if random.random() < 0.5:  # 50% chance to spawn
-                self.obstacles.append({
-                    'x': self.width + 50,
-                    'y': self.height - self.ground_height - 50,
-                    'width': 30,
-                    'height': 50,
-                    'type': self.mode
-                })
+                self.spawn_obstacle()
                 
         # Update particles
         for particle in self.particles:
@@ -207,9 +209,7 @@ class Terrain:
             
         # Draw obstacles
         for obstacle in self.obstacles:
-            pygame.draw.rect(screen, colors['obstacles'],
-                           pygame.Rect(obstacle['x'], obstacle['y'],
-                                     obstacle['width'], obstacle['height']))
+            obstacle.draw(screen)
             
         # Draw particles
         for particle in self.particles:
