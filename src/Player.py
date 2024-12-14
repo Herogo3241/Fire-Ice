@@ -20,7 +20,7 @@ class Player():
         self.ground_buffer = 1  # 1 pixel buffer for ground detection
         
         # Cooldown system
-        self.cooldown_duration = 1000
+        self.cooldown_duration = 5000
         self.current_cooldown = 0
         self.can_switch = True
         

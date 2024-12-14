@@ -1,6 +1,7 @@
 import pygame
 import Terrain
 import Player
+import random
 
 
 def Main():
@@ -20,6 +21,9 @@ def Main():
     dt = 0
     ground = 3 * screen.get_height() // 4
     
+    
+    sceneDuration = random.randint(10000, 30000)
+    
 
 
 
@@ -32,8 +36,16 @@ def Main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                terrain.toggle_scene()
+            
+            
+        if sceneDuration <= 0:
+            sceneDuration = random.randint(10000, 30000)
+            terrain.toggle_scene();
+        
+        
+        sceneDuration -= dt * 1000
+            
+        
 
         # Update game logic
         player.playerMovement(ground, dt)

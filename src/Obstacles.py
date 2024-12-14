@@ -1,6 +1,7 @@
 import pygame
 import random
 
+
 class Obstacle:
     def __init__(self, x, y, mode, width=30, height=50):
         self.x = x
@@ -8,7 +9,7 @@ class Obstacle:
         self.width = width
         self.height = height
         self.mode = mode
-        
+
         # Define colors based on mode
         self.colors = {
             'fire': (255, 100, 0),
@@ -19,13 +20,12 @@ class Obstacle:
         self.x -= scroll_amount
         
     def is_visible(self):
-        return self.x > -50
+        return self.x > -100
         
     def draw(self, screen):
         color = self.colors[self.mode]
         pygame.draw.rect(screen, color,
-                        pygame.Rect(self.x, self.y,
-                                  self.width, self.height))
+                        self.get_rect())
         
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
