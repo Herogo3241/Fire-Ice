@@ -8,13 +8,13 @@ from Player import Player
 # Initialize Pygame
 pygame.init()
 
-screen_width = 800 
+screen_width = 800
 screen_height = 600  
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Fiery Ice")
 
 # Initialize game components
-terrain = Terrain()
+terrain = Terrain(screen_width, screen_height)
 player = Player()
 
 async def main():
@@ -40,6 +40,15 @@ async def main():
             terrain.toggle_scene()
 
         sceneDuration -= dt * 1000
+        
+        if not terrain.transitioning:
+            if player.mode != terrain.mode:
+                print("Game Over")
+                
+        for obstacle in terrain.obstacles:
+            if player.rect.colliderect(obstacle.rect):  # Check for overlap
+                print("Obstacle hit! ", obstacle.mode)
+
 
         # Update game logic
         player.playerMovement(ground, dt)

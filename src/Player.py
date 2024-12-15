@@ -12,6 +12,7 @@ class Player():
         self.mode = "fire"
         self.playerVelocityY = 0
         self.jumping = False
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         
         # Position tracking with sub-pixel precision
         self.exact_y = float(self.y)  # Store exact position as float
@@ -53,6 +54,7 @@ class Player():
             self.current_cooldown = self.cooldown_duration
         
     def playerMovement(self, ground, dt):
+        
         keys = pygame.key.get_pressed()
         
         # Mode switching with cooldown
@@ -93,6 +95,8 @@ class Player():
         
         # Update integer position for rendering
         self.y = int(self.exact_y)
+        
+        self.rect.topleft = (self.x, self.y)
         
     def draw(self, screen):
         colors = self.get_colors()

@@ -30,7 +30,7 @@ class Terrain:
         for i in range(segments_needed):
             self.segments.append({
                 'x': i * self.segment_width,
-                'height_var': 0  # Slight height variation
+                'height_var': 0  
             })
             
         # Clouds for parallax effect
