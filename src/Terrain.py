@@ -190,7 +190,10 @@ class Terrain:
         self.obstacle_spawn_timer += dt
         if self.obstacle_spawn_timer >= self.obstacle_spawn_delay:
             self.obstacle_spawn_timer = 0
-            if random.random() < 0.5:  # 50% chance to spawn
+            self.obstacle_spawn_timer += dt
+            if self.obstacle_spawn_timer >= 0.5:  
+                self.obstacle_spawn_timer = 0
+            if random.random() < 0.8:  
                 self.spawn_obstacle()
                 
         # Update particles with snow-specific movement
