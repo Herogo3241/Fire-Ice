@@ -21,7 +21,7 @@ Fire | Ice is an endless side-scrolling game inspired by the classic arcade era.
 
 ### Play Game Online
 
-[Click Here]([doc:linking-to-pages#anchor-links](https://herogo3241.itch.io/fire-and-ice))
+[Click Here](https://herogo3241.itch.io/fire-and-ice)
 
 
 ### Usage
