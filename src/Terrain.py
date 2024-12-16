@@ -8,16 +8,18 @@ class Terrain:
         self.width = width
         self.height = height
         self.mode = "fire"
-        self.scroll_speed = 300  # pixels per second
+        self.base_scroll_speed = 300  
+        self.scroll_speed = self.base_scroll_speed  
         
-        self.totalPixelTraversed = 0;
-        self.speed_scaling = 1.1;
-
+        self.totalPixelTraversed = 0
+        self.speed_scaling = 1.01  
+        self.speed_threshold = 2000  
+        self.max_speed = 800  
         
         # Transition variables
         self.transitioning = False
         self.transition_progress = 0
-        self.transition_speed = 2.0  # Speed of transition (seconds)
+        self.transition_speed = 2.0 
         self.transition_from_mode = None
         
         # Ground segments for scrolling
@@ -63,7 +65,18 @@ class Terrain:
         # Particles for visual effect
         self.particles = []
     def speedScaling(self):
-        pass
+        # Calculate how many speed increases should have occurred
+        speed_increases = self.totalPixelTraversed // self.speed_threshold
+        
+        # Calculate new speed based on base speed and number of increases
+        new_speed = self.base_scroll_speed * (self.speed_scaling ** speed_increases)
+        
+        # Cap the speed at maximum
+        self.scroll_speed = min(new_speed, self.max_speed)
+        
+        # Also adjust obstacle spawn delay based on speed
+        self.obstacle_spawn_delay = max(0.5, 2 * (self.base_scroll_speed / self.scroll_speed))
+    
             
     def init_clouds(self):
         # Create initial set of clouds
@@ -151,17 +164,19 @@ class Terrain:
                 self.transitioning = False
                 self.transition_progress = 0
 
-        # Rest of the update method remains the same as in the original code
-        # Update segment positions
+
+
         scroll_amount = self.scroll_speed * dt
-        self.totalPixelTraversed += self.scroll_speed
+        self.totalPixelTraversed += scroll_amount
+        
+        # Apply speed scaling
         self.speedScaling()
         
         # Update ground segments
         for segment in self.segments:
             segment['x'] -= scroll_amount
             
-        # Remove off-screen segments and add new ones
+
         while self.segments and self.segments[0]['x'] + self.segment_width < 0:
             self.segments.pop(0)
             new_x = self.segments[-1]['x'] + self.segment_width
